@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    password: 123
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/meal
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+api:
+  info:
+    title: Pdp Meal API
+    description: This is the meal service api for PDP staff
+    version: 1.0
+    terms-of-service: https://unicorn.pdp.uz
+    contact-name: pdp.uz
+    contact-email: john.lgd65@gmail.com
+    contact-url: https://pdp.uz
+    license-name: Apache 2.0
+    license-url: https://www.apache.org/licenses/LICENSE-2.0.html
