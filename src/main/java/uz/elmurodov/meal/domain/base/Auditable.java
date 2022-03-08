@@ -1,9 +1,6 @@
 package uz.elmurodov.meal.domain.base;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Auditable implements BaseEntity {

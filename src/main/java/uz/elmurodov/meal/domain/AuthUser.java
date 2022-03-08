@@ -1,9 +1,7 @@
 package uz.elmurodov.meal.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 import uz.elmurodov.meal.domain.base.Auditable;
 import uz.elmurodov.meal.enums.*;
 
@@ -20,12 +18,11 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthUser extends Auditable {
+public class AuthUser extends Auditable implements GrantedAuthority {
 
     @Column(name = "username", nullable = false, length = 50)
     private String username;
 
-    @Lob
     @Column(name = "password")
     private String password;
 
@@ -53,4 +50,24 @@ public class AuthUser extends Auditable {
     @Enumerated(EnumType.STRING)
     private Language language;
 
+    @Override
+    public String getAuthority() {
+        return role.name();
+    }
+
+
+    @Builder(builderMethodName = "childBuilder")
+    public AuthUser(Long id, Long createdBy, Long updatedBy, LocalDateTime createdAt, LocalDateTime updatedAt, boolean deleted, String username, String password, String fullName, String phone, Department department, String chatId, AuthRole role, Status status, Position position, Language language) {
+        super(id, createdBy, updatedBy, createdAt, updatedAt, deleted);
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.department = department;
+        this.chatId = chatId;
+        this.role = role;
+        this.status = status;
+        this.position = position;
+        this.language = language;
+    }
 }
