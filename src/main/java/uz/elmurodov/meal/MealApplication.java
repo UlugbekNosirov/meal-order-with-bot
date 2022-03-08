@@ -1,10 +1,10 @@
 package uz.elmurodov.meal;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import uz.elmurodov.meal.domain.AuthUser;
 import uz.elmurodov.meal.enums.AuthRole;
@@ -12,12 +12,15 @@ import uz.elmurodov.meal.enums.Department;
 import uz.elmurodov.meal.enums.Position;
 import uz.elmurodov.meal.enums.Status;
 import uz.elmurodov.meal.properties.OpenApiProperties;
+import uz.elmurodov.meal.properties.ServerProperties;
 import uz.elmurodov.meal.repository.AuthUserRepository;
 
 @SpringBootApplication
 @EnableConfigurationProperties({
-        OpenApiProperties.class
+        OpenApiProperties.class,
+        ServerProperties.class
 })
+@OpenAPIDefinition
 public class MealApplication {
 
     private final AuthUserRepository authUserRepository;
@@ -36,7 +39,7 @@ public class MealApplication {
     }
 
 
-//    @Bean
+    //    @Bean
     CommandLineRunner runner() {
         return (args) -> {
             authUserRepository.deleteAll();

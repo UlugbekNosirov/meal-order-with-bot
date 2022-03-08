@@ -12,8 +12,9 @@ import java.io.Serializable;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SessionDto implements Serializable {
-    private Long expiresAt;
+    private Long accessTokenExpiry;
+    private Long refreshTokenExpiry;
+    private Long issuedAt;
     private String accessToken;
     private String refreshToken;
-    private Long issuedAt;
 }

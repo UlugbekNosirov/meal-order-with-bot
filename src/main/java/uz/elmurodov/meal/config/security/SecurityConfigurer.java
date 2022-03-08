@@ -22,16 +22,16 @@ import uz.elmurodov.meal.service.AuthUserService;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
-    private final AuthUserService userService;
-    private final PasswordEncoder passwordEncoder;
     public final static String[] WHITE_LIST = {
             "/api/login",
-            "/api/token",
-            "/api/refresh-token",
+            "/api/v1/refresh-token",
+            "/api/v1/auth/token",
             "/swagger-ui/**",
-            "/api/docs/**",
-            "/api/v1/auth/login",
+            "/api-docs/**",
+
     };
+    private final AuthUserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

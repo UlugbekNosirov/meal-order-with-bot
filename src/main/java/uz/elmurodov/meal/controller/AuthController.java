@@ -3,6 +3,7 @@ package uz.elmurodov.meal.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import uz.elmurodov.meal.dto.auth.AuthUserDto;
 import uz.elmurodov.meal.dto.auth.SessionDto;
@@ -20,12 +21,12 @@ public class AuthController extends AbstractController<AuthUserService> {
     }
 
 
-    @RequestMapping(value = PATH + "/auth/token")
+    @RequestMapping(value = PATH + "/auth/token", method = RequestMethod.POST)
     public ResponseEntity<DataDto<SessionDto>> getToken(@RequestBody AuthUserDto dto) {
         return service.getToken(dto);
     }
 
-    @RequestMapping(value = PATH + "/auth/refresh-token")
+    @RequestMapping(value = PATH + "/auth/refresh-token", method = RequestMethod.GET)
     public ResponseEntity<DataDto<SessionDto>> getToken(HttpServletRequest request, HttpServletResponse response) {
         return service.refreshToken(request, response);
     }

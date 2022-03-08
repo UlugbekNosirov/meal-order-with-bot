@@ -1,5 +1,8 @@
 package uz.elmurodov.meal.enums;
 
 public enum AuthRole {
-    ADMIN
+    ADMIN,
+    HEAD_DEPARTMENT,
+    FOOD_DELIVERER,
+    EMPLOYEE
 }

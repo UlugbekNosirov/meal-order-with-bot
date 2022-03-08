@@ -1,5 +1,10 @@
 package uz.elmurodov.meal.enums;
 
 public enum Department {
-    SELLS
+    SELLS,
+    ACADEMIC,
+    KIDS,
+    ENGLISH,
+    ECMA,
+    HOUSE_HOLD
 }

@@ -15,15 +15,16 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uz.elmurodov.meal.config.security.JwtUtils;
 import uz.elmurodov.meal.dto.auth.AuthUserDto;
+import uz.elmurodov.meal.dto.auth.SessionDto;
 import uz.elmurodov.meal.dto.response.AppErrorDto;
+import uz.elmurodov.meal.dto.response.DataDto;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -52,34 +53,43 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException, IOException {
         User user = (User) authentication.getPrincipal();
-
+        Date expiryForAccessToken = JwtUtils.getExpiry();
+        Date expiryForRefreshToken = JwtUtils.getExpiryForRefreshToken();
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(JwtUtils.getExpiry())
+                .withExpiresAt(expiryForAccessToken)
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(JwtUtils.getAlgorithm());
 
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(JwtUtils.getExpiryForRefreshToken())
+                .withExpiresAt(expiryForRefreshToken)
                 .withIssuer(request.getRequestURL().toString())
                 .sign(JwtUtils.getAlgorithm());
 
-        Map<String, String> tokens = new HashMap<>();
-
-        tokens.put("access_token", accessToken);
-        tokens.put("refresh_token", refreshToken);
+        SessionDto sessionDto = SessionDto.builder()
+                .accessToken(accessToken)
+                .accessTokenExpiry(expiryForAccessToken.getTime())
+                .refreshToken(refreshToken)
+                .refreshTokenExpiry(expiryForRefreshToken.getTime())
+                .issuedAt(System.currentTimeMillis())
+                .build();
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+        new ObjectMapper().writeValue(response.getOutputStream(), new DataDto<>(sessionDto));
 
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        AppErrorDto appError = new AppErrorDto("Bad Request", request.getRequestURL().toString(), HttpStatus.BAD_REQUEST);
-        new ObjectMapper().writeValue(response.getOutputStream(), appError);
+        DataDto<AppErrorDto> resp = new DataDto<>(
+                AppErrorDto.builder()
+                        .message(failed.getMessage())
+                        .path(request.getRequestURL().toString())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .build()
+        );
+        new ObjectMapper().writeValue(response.getOutputStream(), resp);
     }
 }

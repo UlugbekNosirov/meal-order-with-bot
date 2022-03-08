@@ -36,4 +36,15 @@ public class AppErrorDto {
         this.message = message;
         this.path = path;
     }
+
+
+    @Builder
+    public AppErrorDto(HttpStatus status, String message, String path) {
+        this.timestamp = Timestamp.valueOf(LocalDateTime.now());
+        this.status = status.value();
+        this.code = status.getReasonPhrase();
+        this.message = message;
+        this.path = path;
+    }
+
 }

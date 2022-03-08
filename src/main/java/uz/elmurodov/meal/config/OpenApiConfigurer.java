@@ -7,7 +7,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,6 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnProperty(name = "springdoc.swagger-ui.enabled", havingValue = "true", matchIfMissing = true)
-@RequiredArgsConstructor
 public class OpenApiConfigurer {
 
     private static final String BEARER_FORMAT = "JWT";
@@ -25,6 +23,10 @@ public class OpenApiConfigurer {
     private static final String SECURITY_SCHEME_NAME = "Security Scheme";
 
     private final OpenApiProperties properties;
+
+    public OpenApiConfigurer(OpenApiProperties properties) {
+        this.properties = properties;
+    }
 
     @Bean
     public OpenAPI api() {

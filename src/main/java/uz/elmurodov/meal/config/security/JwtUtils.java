@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class JwtUtils {
 
-    public static Integer expiry = 600_000;
+    public static Integer expiry = 200 * 600_000;
     public static String secret = "ASDQW#@!$#@%$#DSFSDFRT%$#%34543terg45%^%$";
 
     public static Date getExpiry() {
